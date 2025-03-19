@@ -1,78 +1,393 @@
-logs/
-    application.log
-output/
-    cv.pdf
-    cv_1742242699632.pdf
-    cv_1742242805401.pdf
-    cv_1742242821881.pdf
-    cv_1742248241882.pdf
-    cv_1742250029090.pdf
-src/
-    main/
-        java/
-            com/
-                example/
-                    stage/
-                        ai/
-                            AIPromptBuilder.java          # Builds prompts for AI models (e.g., Hugging Face)
-                            AIResponseParser.java         # Parses AI responses into structured data
-                        client/
-                            HuggingFaceClient.java        # Client to interact with Hugging Face API
-                        config/
-                            HuggingFaceConfig.java        # Configuration for Hugging Face API (API key, URL, model)
-                            ProfileConfigurations.java    # Configurations for different CV profiles (e.g., engineering, business)
-                        controller/
-                            Page1Controller.java          # Controller for the first page of the CV generator
-                            Page2Controller.java          # Controller for the second page of the CV generator
-                            WelcomeController.java        # Controller for the welcome screen
-                        model/
-                            Certificate.java              # Represents a certification in the CV
-                            CV.java                       # Main CV model containing all CV data
-                            CVAnalysis.java               # Stores AI-generated analysis of the CV
-                            CVRecommendation.java         # Stores AI-generated recommendations for the CV
-                            Education.java                # Represents education details in the CV
-                            Language.java                 # Represents language proficiency in the CV
-                            Project.java                  # Represents a project in the CV
-                            Skill.java                    # Represents a skill in the CV
-                            WorkExperience.java           # Represents work experience in the CV
-                        service/
-                            AIRecommendationService.java  # Service to generate AI-based CV recommendations
-                            CVImprovementService.java     # Service to provide suggestions for improving the CV
-                            PDFGenerationService.java     # Service to generate PDFs from CV data
-                            UserService.java              # Service to manage user-related data
-                        util/
-                            ResourceManager.java          # Manages resources like translations and configurations
-                            TranslationService.java       # Handles translation of CV content into multiple languages
-                        validation/
-                            CVDataValidator.java          # Validates CV data to ensure it meets requirements
-                        CVBuilder.java                    # Main application class to launch the CV generator
-        resources/
-            com/
-                example/
-                    stage/
-                        i18n/
-                            messages_ar.properties        # Arabic translations for the UI
-                            messages_de.properties        # German translations for the UI
-                            messages_en.properties        # English translations for the UI
-                            messages_fr.properties        # French translations for the UI
-                        styles/
-                            main.css                      # CSS styles for the application
-                        page1.fxml                        # FXML file for the first page of the CV generator
-                        page2.fxml                        # FXML file for the second page of the CV generator
-                        welcome.fxml                      # FXML file for the welcome screen
-            images/
-                esprit-removebg-preview.png               # ESPRIT logo
-                esprim.png                                # ESPRIM logo
-                espritesb.png                             # ESPRIT School of Business logo
-                gear.png                                  # Loading gear icon
-                logo.png                                  # Application logo
-                tunisie-removebg-preview.png              # Tunisia coat of arms
-            application.properties                        # Application configuration properties
-            logback.xml                                   # Logging configuration
-    output/
-        cv.pdf                                            # Generated CV PDFs
-pom.xml                                                   # Maven build configuration
-README.md                                                 # Project documentation
+Structure du projet:
+┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐
+│  UI Components  │       │ Service Layer   │       │  AI Components  │
+│-----------------│       │-----------------│       │-----------------│
+│ Page1Controller │──┐    │                 │       │                 │
+│ Page2Controller │  │    │ PDFGeneration   │       │ AIPromptBuilder │
+│ FXML Files      │  ├───►│ Service         │       │ AIResponseParser│
+└─────────────────┘  │    │                 │   ┌──►│                 │
+                     │    │ CVImprovement   │   │   └─────────────────┘
+┌─────────────────┐  │    │ Service         │   │   ┌─────────────────┐
+│   Data Models   │  │    │                 │   │   │  API Clients    │
+│-----------------│  │    │ AIRecommendation│───┘   │-----------------│
+│       CV        │◄─┼────│ Service         │       │ HuggingFaceClient│
+│  WorkExperience │  │    │                 │       │                 │
+│    Education    │  │    └─────────────────┘       │                 │
+│      Skill      │  │                              └─────┬───────────┘
+│     Project     │  │    ┌─────────────────┐            │
+│   Certificate   │  │    │  Configuration  │            │
+│    Language     │  │    │-----------------│            │
+└─────────────────┘  └───►│ HuggingFaceConfig│◄───────────┘
+                          └─────────────────┘
+.idea
+logs
+output
+src
+target
+.gitignore
+mvnw
+mvnw.cmd
+pom.xml
+qodana.yaml
+README.md
+.idea\libraries
+.idea\shelf
+.idea\.gitignore
+.idea\checkstyle-idea.xml
+.idea\compiler.xml
+.idea\encodings.xml
+.idea\jarRepositories.xml
+.idea\kotlinc.xml
+.idea\misc.xml
+.idea\vcs.xml
+.idea\workspace.xml
+.idea\libraries\lib.xml
+.idea\shelf\Uncommitted_changes_before_Checkout_at_26_02_2025_10_50_[Changes]
+.idea\shelf\Uncommitted_changes_before_rebase_[Changes]
+.idea\shelf\Uncommitted_changes_before_Update_at_26_02_2025_11_02_[Changes]
+.idea\shelf\Uncommitted_changes_before_Checkout_at_26_02_2025_10_50__Changes_.xml
+.idea\shelf\Uncommitted_changes_before_rebase__Changes_.xml
+.idea\shelf\Uncommitted_changes_before_Update_at_26_02_2025_11_02__Changes_.xml
+.idea\shelf\Uncommitted_changes_before_Checkout_at_26_02_2025_10_50_[Changes]\DatabaseUtil.class
+.idea\shelf\Uncommitted_changes_before_Checkout_at_26_02_2025_10_50_[Changes]\HelloApplication.class
+.idea\shelf\Uncommitted_changes_before_Checkout_at_26_02_2025_10_50_[Changes]\module-info.class
+.idea\shelf\Uncommitted_changes_before_Checkout_at_26_02_2025_10_50_[Changes]\satge-1.0-SNAPSHOT.jar
+.idea\shelf\Uncommitted_changes_before_Checkout_at_26_02_2025_10_50_[Changes]\shelved.patch
+.idea\shelf\Uncommitted_changes_before_Checkout_at_26_02_2025_10_50_[Changes]\UtilisateurDAO.class
+.idea\shelf\Uncommitted_changes_before_rebase_[Changes]\shelved.patch
+.idea\shelf\Uncommitted_changes_before_Update_at_26_02_2025_11_02_[Changes]\DatabaseUtil.class
+.idea\shelf\Uncommitted_changes_before_Update_at_26_02_2025_11_02_[Changes]\HelloApplication.class
+.idea\shelf\Uncommitted_changes_before_Update_at_26_02_2025_11_02_[Changes]\module-info.class
+.idea\shelf\Uncommitted_changes_before_Update_at_26_02_2025_11_02_[Changes]\satge-1.0-SNAPSHOT.jar
+.idea\shelf\Uncommitted_changes_before_Update_at_26_02_2025_11_02_[Changes]\shelved.patch
+.idea\shelf\Uncommitted_changes_before_Update_at_26_02_2025_11_02_[Changes]\UtilisateurDAO.class
+logs\application.log
+output\cv_Mohamed_Abidi_2025-03-18_21-47-24.pdf
+output\cv_Mohamed_Abidi_2025-03-18_21-57-15.pdf
+output\cv_Mohamed_Abidi_2025-03-18_23-30-15.pdf
+output\cv_Mohamed_Abidi_2025-03-18_23-30-25.pdf
+output\cv_Mohamed_Abidi_2025-03-18_23-30-56.pdf
+output\cv_Mohamed_Abidi_2025-03-18_23-40-14.pdf
+output\cv_Mohamed_Abidi_2025-03-19_06-46-13.pdf
+output\cv_Mohamed_Abidi_2025-03-19_06-50-31.pdf
+output\cv_Mohamed_Abidi_2025-03-19_06-56-09.pdf
+output\cv_Mohamed_Abidi_2025-03-19_07-03-50.pdf
+output\cv_Mohamed_Abidi_2025-03-19_07-07-54.pdf
+output\cv_Mohamed_Abidi_2025-03-19_07-13-37.pdf
+output\cv_Mohamed_Abidi_2025-03-19_07-14-18.pdf
+src\main
+src\output
+src\main\java
+src\main\resources
+src\main\java\com
+src\main\java\PDType1Font
+src\main\java\module-info.java
+src\main\java\com\example
+src\main\java\com\example\stage
+src\main\java\com\example\stage\ai
+src\main\java\com\example\stage\client
+src\main\java\com\example\stage\config
+src\main\java\com\example\stage\controller
+src\main\java\com\example\stage\dao
+src\main\java\com\example\stage\model
+src\main\java\com\example\stage\service
+src\main\java\com\example\stage\util
+src\main\java\com\example\stage\validation
+src\main\java\com\example\stage\CVBuilder.java
+src\main\java\com\example\stage\HelloApplication.java
+src\main\java\com\example\stage\MainApp.java
+src\main\java\com\example\stage\ai\AIPromptBuilder.java
+src\main\java\com\example\stage\ai\AIResponseParser.java
+src\main\java\com\example\stage\client\HuggingFaceClient.java
+src\main\java\com\example\stage\config\HuggingFaceConfig.java
+src\main\java\com\example\stage\config\ProfileConfigurations.java
+src\main\java\com\example\stage\controller\AdminController.java
+src\main\java\com\example\stage\controller\AdminCreationController.java
+src\main\java\com\example\stage\controller\AdminDemandesController.java
+src\main\java\com\example\stage\controller\AdminGestionUtilisateursController.java
+src\main\java\com\example\stage\controller\AdminHomeController.java
+src\main\java\com\example\stage\controller\AdminToutesEntreprisesController.java
+src\main\java\com\example\stage\controller\ChercheurEmploiSignUpController.java
+src\main\java\com\example\stage\controller\CreateAdminController.java
+src\main\java\com\example\stage\controller\CVFormController.java
+src\main\java\com\example\stage\controller\DatabaseAlterController.java
+src\main\java\com\example\stage\controller\EditProfileController.java
+src\main\java\com\example\stage\controller\entreprisehome.java
+src\main\java\com\example\stage\controller\EntrepriseSignUpController.java
+src\main\java\com\example\stage\controller\FirstPageController.java
+src\main\java\com\example\stage\controller\HomeChercheurController.java
+src\main\java\com\example\stage\controller\HomeController.java
+src\main\java\com\example\stage\controller\LoginController.java
+src\main\java\com\example\stage\controller\Page1Controller.java
+src\main\java\com\example\stage\controller\Page2Controller.java
+src\main\java\com\example\stage\controller\SignUpChoiceController.java
+src\main\java\com\example\stage\controller\SignUpController.java
+src\main\java\com\example\stage\controller\test.java
+src\main\java\com\example\stage\controller\WelcomeController.java
+src\main\java\com\example\stage\dao\AdministrateurDAO.java
+src\main\java\com\example\stage\dao\ChercheurEmploiDAO.java
+src\main\java\com\example\stage\dao\EntrepriseDAO.java
+src\main\java\com\example\stage\dao\UtilisateurDAO.java
+src\main\java\com\example\stage\model\Administrateur.java
+src\main\java\com\example\stage\model\Certificate.java
+src\main\java\com\example\stage\model\ChercheurEmploi.java
+src\main\java\com\example\stage\model\Competence.java
+src\main\java\com\example\stage\model\CV.java
+src\main\java\com\example\stage\model\CVAnalysis.java
+src\main\java\com\example\stage\model\CVData.java
+src\main\java\com\example\stage\model\CVRecommendation.java
+src\main\java\com\example\stage\model\Education.java
+src\main\java\com\example\stage\model\Entreprise.java
+src\main\java\com\example\stage\model\Language.java
+src\main\java\com\example\stage\model\ProfileConfig.java
+src\main\java\com\example\stage\model\ProfileType.java
+src\main\java\com\example\stage\model\Project.java
+src\main\java\com\example\stage\model\Skill.java
+src\main\java\com\example\stage\model\Utilisateur.java
+src\main\java\com\example\stage\model\WorkExperience.java
+src\main\java\com\example\stage\service\AdministrateurService.java
+src\main\java\com\example\stage\service\AIRecommendationService.java
+src\main\java\com\example\stage\service\ChercheurEmploiService.java
+src\main\java\com\example\stage\service\CVGenerationService.java
+src\main\java\com\example\stage\service\CVImprovementService.java
+src\main\java\com\example\stage\service\EntrepriseService.java
+src\main\java\com\example\stage\service\PDFGenerationService.java
+src\main\java\com\example\stage\service\PDFPageManager.java
+src\main\java\com\example\stage\service\UserService.java
+src\main\java\com\example\stage\service\UtilisateurService.java
+src\main\java\com\example\stage\util\BCryptUtil.java
+src\main\java\com\example\stage\util\DatabaseUtil.java
+src\main\java\com\example\stage\util\FileUtil.java
+src\main\java\com\example\stage\util\LocaleConstants.java
+src\main\java\com\example\stage\util\NavigationManager.java
+src\main\java\com\example\stage\util\ResourceManager.java
+src\main\java\com\example\stage\util\TranslationService.java
+src\main\java\com\example\stage\util\TranslationUtils.java
+src\main\java\com\example\stage\validation\CVDataValidator.java
+src\main\java\PDType1Font\HELVETICA.java
+src\main\java\PDType1Font\HELVETICA_BOLD.java
+src\main\resources\com
+src\main\resources\cv
+src\main\resources\fonts
+src\main\resources\images
+src\main\resources\pdf
+src\main\resources\templates
+src\main\resources\application.properties
+src\main\resources\logback.xml
+src\main\resources\com\example
+src\main\resources\com\example\stage
+src\main\resources\com\example\stage\i18n
+src\main\resources\com\example\stage\styles
+src\main\resources\com\example\stage\admin-demandes.fxml
+src\main\resources\com\example\stage\admin-gestion-utilisateurs.fxml
+src\main\resources\com\example\stage\admin-home.fxml
+src\main\resources\com\example\stage\admin-sign-up.fxml
+src\main\resources\com\example\stage\admin-toutes-entreprises.fxml
+src\main\resources\com\example\stage\chercheur-emploi-sign-up.fxml
+src\main\resources\com\example\stage\create-admin.fxml
+src\main\resources\com\example\stage\cv-form-styles.css
+src\main\resources\com\example\stage\cv-form.fxml
+src\main\resources\com\example\stage\database_alter.fxml
+src\main\resources\com\example\stage\editprofile.fxml
+src\main\resources\com\example\stage\entreprise-sign-up.fxml
+src\main\resources\com\example\stage\entreprisehome.fxml
+src\main\resources\com\example\stage\first-page.fxml
+src\main\resources\com\example\stage\hamma-signup.fxml
+src\main\resources\com\example\stage\hello-view.fxml
+src\main\resources\com\example\stage\home.fxml
+src\main\resources\com\example\stage\homechercheur.fxml
+src\main\resources\com\example\stage\login.fxml
+src\main\resources\com\example\stage\page1.fxml
+src\main\resources\com\example\stage\page2.fxml
+src\main\resources\com\example\stage\profile.jpg
+src\main\resources\com\example\stage\sign-up-choice.fxml
+src\main\resources\com\example\stage\sign-up.fxml
+src\main\resources\com\example\stage\skills_module.fxml
+src\main\resources\com\example\stage\users-list.fxml
+src\main\resources\com\example\stage\welcome.fxml
+src\main\resources\com\example\stage\i18n\messages_ar.properties
+src\main\resources\com\example\stage\i18n\messages_de.properties
+src\main\resources\com\example\stage\i18n\messages_en.properties
+src\main\resources\com\example\stage\i18n\messages_fr.properties
+src\main\resources\com\example\stage\styles\main.css
+src\main\resources\images\1176.png
+src\main\resources\images\Coat_of_arms_of_Tunisia.svg.png
+src\main\resources\images\esb-removebg-preview.png
+src\main\resources\images\esprim.png
+src\main\resources\images\esprit-removebg-preview.png
+src\main\resources\images\espritesb.png
+src\main\resources\images\espritprepa-removebg-preview.png
+src\main\resources\images\gear.png
+src\main\resources\images\gg.png
+src\main\resources\images\logo.jpg
+src\main\resources\images\logo.png
+src\main\resources\images\profile.jpg
+src\main\resources\images\tunisie-removebg-preview.png
+src\main\resources\images\unnamed-removebg-preview.png
+target\classes
+target\generated-sources
+target\maven-status
+target\classes\com
+target\classes\images
+target\classes\PDType1Font
+target\classes\application.properties
+target\classes\logback.xml
+target\classes\module-info.class
+target\classes\com\example
+target\classes\com\example\stage
+target\classes\com\example\stage\ai
+target\classes\com\example\stage\client
+target\classes\com\example\stage\config
+target\classes\com\example\stage\controller
+target\classes\com\example\stage\dao
+target\classes\com\example\stage\i18n
+target\classes\com\example\stage\model
+target\classes\com\example\stage\service
+target\classes\com\example\stage\styles
+target\classes\com\example\stage\util
+target\classes\com\example\stage\validation
+target\classes\com\example\stage\admin-demandes.fxml
+target\classes\com\example\stage\admin-gestion-utilisateurs.fxml
+target\classes\com\example\stage\admin-home.fxml
+target\classes\com\example\stage\admin-sign-up.fxml
+target\classes\com\example\stage\admin-toutes-entreprises.fxml
+target\classes\com\example\stage\chercheur-emploi-sign-up.fxml
+target\classes\com\example\stage\create-admin.fxml
+target\classes\com\example\stage\cv-form-styles.css
+target\classes\com\example\stage\cv-form.fxml
+target\classes\com\example\stage\CVBuilder.class
+target\classes\com\example\stage\database_alter.fxml
+target\classes\com\example\stage\editprofile.fxml
+target\classes\com\example\stage\entreprise-sign-up.fxml
+target\classes\com\example\stage\entreprisehome.fxml
+target\classes\com\example\stage\first-page.fxml
+target\classes\com\example\stage\hamma-signup.fxml
+target\classes\com\example\stage\hello-view.fxml
+target\classes\com\example\stage\HelloApplication.class
+target\classes\com\example\stage\home.fxml
+target\classes\com\example\stage\homechercheur.fxml
+target\classes\com\example\stage\login.fxml
+target\classes\com\example\stage\MainApp.class
+target\classes\com\example\stage\page1.fxml
+target\classes\com\example\stage\page2.fxml
+target\classes\com\example\stage\profile.jpg
+target\classes\com\example\stage\sign-up-choice.fxml
+target\classes\com\example\stage\sign-up.fxml
+target\classes\com\example\stage\skills_module.fxml
+target\classes\com\example\stage\users-list.fxml
+target\classes\com\example\stage\welcome.fxml
+target\classes\com\example\stage\ai\AIPromptBuilder.class
+target\classes\com\example\stage\ai\AIResponseParser.class
+target\classes\com\example\stage\client\HuggingFaceClient.class
+target\classes\com\example\stage\config\HuggingFaceConfig.class
+target\classes\com\example\stage\config\ProfileConfigurations.class
+target\classes\com\example\stage\controller\AdminController.class
+target\classes\com\example\stage\controller\AdminCreationController.class
+target\classes\com\example\stage\controller\AdminDemandesController.class
+target\classes\com\example\stage\controller\AdminGestionUtilisateursController.class
+target\classes\com\example\stage\controller\AdminHomeController.class
+target\classes\com\example\stage\controller\AdminToutesEntreprisesController.class
+target\classes\com\example\stage\controller\ChercheurEmploiSignUpController.class
+target\classes\com\example\stage\controller\CreateAdminController.class
+target\classes\com\example\stage\controller\CVFormController.class
+target\classes\com\example\stage\controller\DatabaseAlterController.class
+target\classes\com\example\stage\controller\EditProfileController.class
+target\classes\com\example\stage\controller\entreprisehome.class
+target\classes\com\example\stage\controller\EntrepriseSignUpController.class
+target\classes\com\example\stage\controller\FirstPageController.class
+target\classes\com\example\stage\controller\HomeChercheurController.class
+target\classes\com\example\stage\controller\HomeController.class
+target\classes\com\example\stage\controller\LoginController.class
+target\classes\com\example\stage\controller\Page1Controller.class
+target\classes\com\example\stage\controller\Page2Controller.class
+target\classes\com\example\stage\controller\SignUpChoiceController.class
+target\classes\com\example\stage\controller\SignUpController.class
+target\classes\com\example\stage\controller\test.class
+target\classes\com\example\stage\controller\WelcomeController$1.class
+target\classes\com\example\stage\controller\WelcomeController.class
+target\classes\com\example\stage\dao\AdministrateurDAO.class
+target\classes\com\example\stage\dao\ChercheurEmploiDAO.class
+target\classes\com\example\stage\dao\EntrepriseDAO.class
+target\classes\com\example\stage\dao\UtilisateurDAO.class
+target\classes\com\example\stage\i18n\messages_ar.properties
+target\classes\com\example\stage\i18n\messages_de.properties
+target\classes\com\example\stage\i18n\messages_en.properties
+target\classes\com\example\stage\i18n\messages_fr.properties
+target\classes\com\example\stage\model\Administrateur.class
+target\classes\com\example\stage\model\Certificate$CertificateType.class
+target\classes\com\example\stage\model\Certificate.class
+target\classes\com\example\stage\model\ChercheurEmploi.class
+target\classes\com\example\stage\model\Competence.class
+target\classes\com\example\stage\model\CV$ProgramType.class
+target\classes\com\example\stage\model\CV.class
+target\classes\com\example\stage\model\CVAnalysis.class
+target\classes\com\example\stage\model\CVData.class
+target\classes\com\example\stage\model\CVRecommendation.class
+target\classes\com\example\stage\model\Education$EducationLevel.class
+target\classes\com\example\stage\model\Education$EngineeringSpecialization.class
+target\classes\com\example\stage\model\Education.class
+target\classes\com\example\stage\model\Entreprise.class
+target\classes\com\example\stage\model\Language$ProficiencyLevel.class
+target\classes\com\example\stage\model\Language.class
+target\classes\com\example\stage\model\ProfileConfig.class
+target\classes\com\example\stage\model\ProfileType.class
+target\classes\com\example\stage\model\Project$ProjectStatus.class
+target\classes\com\example\stage\model\Project$ProjectType.class
+target\classes\com\example\stage\model\Project.class
+target\classes\com\example\stage\model\Skill$1.class
+target\classes\com\example\stage\model\Skill$SkillCategory.class
+target\classes\com\example\stage\model\Skill$SkillLevel.class
+target\classes\com\example\stage\model\Skill.class
+target\classes\com\example\stage\model\Utilisateur.class
+target\classes\com\example\stage\model\WorkExperience.class
+target\classes\com\example\stage\service\AdministrateurService.class
+target\classes\com\example\stage\service\AIRecommendationService$ProfileType.class
+target\classes\com\example\stage\service\AIRecommendationService.class
+target\classes\com\example\stage\service\ChercheurEmploiService.class
+target\classes\com\example\stage\service\CVGenerationService.class
+target\classes\com\example\stage\service\CVImprovementService.class
+target\classes\com\example\stage\service\EntrepriseService.class
+target\classes\com\example\stage\service\PDFGenerationService$1.class
+target\classes\com\example\stage\service\PDFGenerationService.class
+target\classes\com\example\stage\service\PDFPageManager.class
+target\classes\com\example\stage\service\UserService.class
+target\classes\com\example\stage\service\UtilisateurService.class
+target\classes\com\example\stage\styles\main.css
+target\classes\com\example\stage\util\BCryptUtil.class
+target\classes\com\example\stage\util\DatabaseUtil.class
+target\classes\com\example\stage\util\FileUtil.class
+target\classes\com\example\stage\util\LocaleConstants.class
+target\classes\com\example\stage\util\NavigationManager.class
+target\classes\com\example\stage\util\ResourceManager$LocaleChangeListener.class
+target\classes\com\example\stage\util\ResourceManager.class
+target\classes\com\example\stage\util\TranslationService.class
+target\classes\com\example\stage\util\TranslationUtils.class
+target\classes\com\example\stage\validation\CVDataValidator$ValidationResult.class
+target\classes\com\example\stage\validation\CVDataValidator.class
+target\classes\images\1176.png
+target\classes\images\Coat_of_arms_of_Tunisia.svg.png
+target\classes\images\esb-removebg-preview.png
+target\classes\images\esprim.png
+target\classes\images\esprit-removebg-preview.png
+target\classes\images\espritesb.png
+target\classes\images\espritprepa-removebg-preview.png
+target\classes\images\gear.png
+target\classes\images\gg.png
+target\classes\images\logo.jpg
+target\classes\images\logo.png
+target\classes\images\profile.jpg
+target\classes\images\tunisie-removebg-preview.png
+target\classes\images\unnamed-removebg-preview.png
+target\classes\PDType1Font\HELVETICA.class
+target\classes\PDType1Font\HELVETICA_BOLD.class
+target\generated-sources\annotations
+target\maven-status\maven-compiler-plugin
+target\maven-status\maven-compiler-plugin\compile
+target\maven-status\maven-compiler-plugin\compile\default-compile
+target\maven-status\maven-compiler-plugin\compile\default-compile\createdFiles.lst
+target\maven-status\maven-compiler-plugin\compile\default-compile\inputFiles.lst
+
+==================================================
 
 - HuggingFaceConfig.java: Configuration file for HuggingFace integration.
 - HuggingFaceClient.java: Client implementation for interacting with HuggingFace APIs.
@@ -92,75 +407,45 @@ Chemin complet: C:\Users\Sh-Pc\Desktop\HomeFORNOW\KHEDMA\src\main\java\com\examp
 package com.example.stage.config;
 
 public class HuggingFaceConfig {
-    private static final HuggingFaceConfig instance = new HuggingFaceConfig();
+    private static final HuggingFaceConfig INSTANCE = new HuggingFaceConfig();
 
-    private String apiKey = "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";
+    private String apiKey = "hf_API_KEY_GOES_HERE"; // Replace with your actual API key
+    private String modelId = "google/flan-t5-base"; // A smaller model that works well for text generation
     private String apiUrl = "https://api-inference.huggingface.co/models/";
-    private String modelId = "gpt2";
 
-    // Private constructor to prevent instantiation
-    private HuggingFaceConfig() {}
+    private HuggingFaceConfig() {
+        // Private constructor to enforce singleton pattern
 
-    // Static method to get the instance
+        // Try to load API key from environment variable
+        String envApiKey = System.getenv("HUGGINGFACE_API_KEY");
+        if (envApiKey != null && !envApiKey.isEmpty()) {
+            this.apiKey = envApiKey;
+        }
+    }
+
     public static HuggingFaceConfig getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     public String getApiKey() {
         return apiKey;
     }
 
-    public void setApiKey(String apiKey) {
-        if (apiKey != null && !apiKey.trim().isEmpty()) {
-            this.apiKey = apiKey.trim();
-        }
+    public String getModelId() {
+        return modelId;
     }
 
     public String getApiUrl() {
         return apiUrl;
     }
 
-    public void setApiUrl(String apiUrl) {
-        if (apiUrl != null && !apiUrl.trim().isEmpty()) {
-            this.apiUrl = apiUrl.trim();
-        }
-    }
-
-    public String getModelId() {
-        return modelId;
-    }
-
-    public void setModelId(String modelId) {
-        if (modelId != null && !modelId.trim().isEmpty()) {
-            this.modelId = modelId;
-        }
-    }
-
-    // Helper method to get the complete API URL
     public String getCompleteApiUrl() {
         return apiUrl + modelId;
     }
 
-    // Optional: Method to load configuration from a properties file
-    public void loadConfig(String propertiesPath) {
-        try {
-            java.util.Properties props = new java.util.Properties();
-            props.load(getClass().getClassLoader().getResourceAsStream(propertiesPath));
-
-            setApiKey(props.getProperty("huggingface.api-key", apiKey));
-            setApiUrl(props.getProperty("huggingface.api-url", apiUrl));
-            setModelId(props.getProperty("huggingface.model-id", modelId));
-        } catch (Exception e) {
-            // Log error but use default values
-            System.err.println("Failed to load HuggingFace configuration: " + e.getMessage());
-        }
-    }
-
-    // Optional: Reset to default values
-    public void resetToDefaults() {
-        apiKey = "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";
-        apiUrl = "https://api-inference.huggingface.co/models/";
-        modelId = "gpt2";
+    // For testing, allow setting a different model
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
     }
 }
 ==================================================
@@ -172,46 +457,95 @@ package com.example.stage.client;
 
 import com.example.stage.config.HuggingFaceConfig;
 import okhttp3.*;
+
 import java.io.IOException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.concurrent.TimeUnit;
 
 public class HuggingFaceClient {
-    private static final Logger logger = LoggerFactory.getLogger(HuggingFaceClient.class);
     private final OkHttpClient client;
     private final HuggingFaceConfig config;
-    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     public HuggingFaceClient(HuggingFaceConfig config) {
-        this.client = new OkHttpClient.Builder()
-                .build();
         this.config = config;
+        this.client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
     }
 
     public String generateText(String prompt) throws IOException {
         try {
-            RequestBody body = RequestBody.create(
-                    String.format("{\"inputs\":\"%s\"}", prompt.replace("\"", "\\\"")),
-                    JSON
-            );
+            // Create JSON request body
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            String jsonBody = "{\"inputs\":\"" + escapeJsonString(prompt) + "\"}";
+            RequestBody body = RequestBody.create(jsonBody, JSON);
 
+            // Build the request with authorization header
             Request request = new Request.Builder()
-                    .url(config.getApiUrl() + config.getModelId())
-                    .post(body)
+                    .url(config.getCompleteApiUrl())
                     .addHeader("Authorization", "Bearer " + config.getApiKey())
+                    .post(body)
                     .build();
 
-            try (Response response = client.newCall(request).execute()) {
-                if (!response.isSuccessful()) {
-                    logger.error("API call failed with code: {}", response.code());
-                    throw new IOException("Unexpected code " + response);
-                }
-                return response.body().string();
+            // Make the API call
+            Response response = client.newCall(request).execute();
+
+            // Check if call was successful
+            if (!response.isSuccessful()) {
+                System.err.println("API call failed with code: " + response.code());
+                System.err.println("Response: " + response.body().string());
+                throw new IOException("Unexpected response code: " + response.code());
             }
+
+            // Parse the response
+            String responseBody = response.body().string();
+
+            // Extract the generated text from JSON response
+            // This depends on the model's response format
+            if (responseBody.startsWith("[{")) {
+                // For models that return a JSON array response
+                return extractTextFromJsonArray(responseBody);
+            } else {
+                // For models that return plain text or other format
+                return responseBody;
+            }
+
         } catch (Exception e) {
-            logger.error("Error generating text: {}", e.getMessage());
+            System.err.println("Error generating text: " + e.getMessage());
             throw new IOException("Failed to generate text", e);
         }
+    }
+
+    // Helper method to escape JSON strings
+    private String escapeJsonString(String input) {
+        return input.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
+    }
+
+    // Extract text from JSON array response
+    private String extractTextFromJsonArray(String jsonArrayResponse) {
+        // This is a simple extraction method that works for many Hugging Face models
+        // A more robust implementation would use a proper JSON parser
+
+        // Check if it contains a "generated_text" field
+        if (jsonArrayResponse.contains("\"generated_text\"")) {
+            int startIndex = jsonArrayResponse.indexOf("\"generated_text\"") + "\"generated_text\"".length() + 2;
+            int endIndex = jsonArrayResponse.indexOf("\"}", startIndex);
+
+            if (endIndex > startIndex) {
+                return jsonArrayResponse.substring(startIndex, endIndex)
+                        .replace("\\n", "\n")
+                        .replace("\\\"", "\"")
+                        .replace("\\\\", "\\");
+            }
+        }
+
+        // If we can't extract properly, return the whole response
+        return jsonArrayResponse;
     }
 }
 ==================================================
@@ -1316,5 +1650,1865 @@ public class CVRecommendation {/*
         }
     }*/
 }
+==================================================
+
+Fichier: src\main\java\com\example\stage\service\PDFGenerationService.java
+Chemin complet: C:\Users\Sh-Pc\Desktop\HomeFORNOW\KHEDMA\src\main\java\com\example\stage\service\PDFGenerationService.java
+-----
+package com.example.stage.service;
+
+import com.example.stage.model.*;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
+public class PDFGenerationService {
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public void generatePDF(CV cv, String filePath) throws IOException {
+        // VÃ©rifier que l'institution est valide
+        if (cv.getInstitution() == null || !isValidInstitution(cv.getInstitution())) {
+            throw new IllegalArgumentException("Institution non reconnue: " + cv.getInstitution());
+        }
+
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.A4);
+            document.addPage(page);
+
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                // Ajouter l'en-tÃªte avec logo
+                addHeaderWithLogo(document, page, cv);
+
+                int yOffset = 750;  // Position de dÃ©part depuis le haut
+
+                // Informations personnelles
+                yOffset = addPersonalInformation(contentStream, cv, yOffset);
+
+                // RÃ©sumÃ© si disponible
+                if (cv.getSummary() != null && !cv.getSummary().isEmpty()) {
+                    yOffset = addSection(contentStream, "RÃ©sumÃ©", cv.getSummary(), yOffset);
+                }
+
+                // Sections spÃ©cifiques selon le type de programme
+                addProfileSpecificSections(contentStream, cv, yOffset);
+
+                // Ã‰ducation
+                yOffset = addEducationSection(contentStream, cv.getEducations(), yOffset);
+
+                // ExpÃ©rience professionnelle
+                yOffset = addWorkExperienceSection(contentStream, cv.getWorkExperiences(), yOffset);
+
+                // Projets
+                yOffset = addProjectsSection(contentStream, cv.getProjects(), yOffset);
+
+                // Certifications
+                yOffset = addCertificatesSection(contentStream, cv.getCertificates(), yOffset);
+
+                // Langues
+                yOffset = addLanguagesSection(contentStream, cv.getLanguages(), yOffset);
+
+                // CompÃ©tences
+                addSkillsSection(contentStream, cv.getSkills(), yOffset);
+            }
+
+            // Ajout du pied de page
+            addFooter(document, page, cv);
+
+            document.save(filePath);
+        }
+    }
+
+    private boolean isValidInstitution(String institution) {
+        return "ESPRIT".equalsIgnoreCase(institution) ||
+                "ESPRIM".equalsIgnoreCase(institution) ||
+                "ESB".equalsIgnoreCase(institution);
+    }
+
+    private void addHeaderWithLogo(PDDocument document, PDPage page, CV cv) throws IOException {
+        PDImageXObject logo;
+        switch (cv.getInstitution().toUpperCase()) {
+            case "ESPRIT":
+                logo = PDImageXObject.createFromFile("src/main/resources/images/esprit-removebg-preview.png", document);
+                break;
+            case "ESPRIM":
+                logo = PDImageXObject.createFromFile("src/main/resources/images/esprim.png", document);
+                break;
+            case "ESB":
+                logo = PDImageXObject.createFromFile("src/main/resources/images/esb-removebg-preview.png", document);
+                break;
+            default:
+                throw new IllegalArgumentException("Institution non reconnue: " + cv.getInstitution());
+        }
+
+        try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)) {
+            float scale = 0.3f;
+            contentStream.drawImage(logo, 50, page.getMediaBox().getHeight() - 120,
+                    logo.getWidth() * scale, logo.getHeight() * scale);
+        }
+    }
+
+    private int addPersonalInformation(PDPageContentStream contentStream, CV cv, int yOffset) throws IOException {
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        contentStream.newLineAtOffset(50, yOffset);
+        contentStream.showText("Informations Personnelles");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 12);
+        contentStream.newLineAtOffset(50, yOffset - 20);
+
+        if (cv.getName() != null) {
+            contentStream.showText("Nom: " + cv.getName());
+            contentStream.newLineAtOffset(0, -15);
+        }
+
+        if (cv.getEmail() != null) {
+            contentStream.showText("Email: " + cv.getEmail());
+            contentStream.newLineAtOffset(0, -15);
+        }
+
+        if (cv.getPhone() != null) {
+            contentStream.showText("TÃ©lÃ©phone: " + cv.getPhone());
+            contentStream.newLineAtOffset(0, -15);
+        }
+
+        if (cv.getAddress() != null) {
+            contentStream.showText("Adresse: " + cv.getAddress());
+            contentStream.newLineAtOffset(0, -15);
+        }
+
+        if (cv.getLinkedin() != null) {
+            contentStream.showText("LinkedIn: " + cv.getLinkedin());
+            contentStream.newLineAtOffset(0, -15);
+        }
+
+        if (cv.getPortfolio() != null) {
+            contentStream.showText("Portfolio: " + cv.getPortfolio());
+            contentStream.newLineAtOffset(0, -15);
+        }
+
+        contentStream.endText();
+        return yOffset - 120;
+    }
+
+    private void addFooter(PDDocument document, PDPage page, CV cv) throws IOException {
+        try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)) {
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.HELVETICA, 8);
+            contentStream.setNonStrokingColor(java.awt.Color.GRAY);  // Using java.awt.Color instead of JavaFX Color
+            contentStream.newLineAtOffset(50, 30);
+            contentStream.showText("GÃ©nÃ©rÃ© le " + LocalDateTime.now().format(
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy Ã  HH:mm")));
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.HELVETICA_OBLIQUE, 8);
+            contentStream.newLineAtOffset(page.getMediaBox().getWidth() - 200, 30);
+            contentStream.showText("CV " + cv.getInstitution() + " - " + cv.getProgramType().getDisplayName());
+            contentStream.endText();
+        }
+    }
+
+    private int addSection(PDPageContentStream contentStream, String title, String content, int yOffset) throws IOException {
+        if (content == null || content.isEmpty()) {
+            return yOffset;
+        }
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        contentStream.newLineAtOffset(50, yOffset);
+        contentStream.showText(title);
+        contentStream.endText();
+
+        yOffset -= 20; // Espacement aprÃ¨s le titre
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 12);
+        contentStream.newLineAtOffset(50, yOffset);
+        contentStream.showText(content);
+        contentStream.endText();
+
+        return yOffset - 30; // Espacement aprÃ¨s le contenu
+    }
+
+
+    private int addEducationSection(PDPageContentStream contentStream, List<Education> educations, int yOffset) throws IOException {
+        if (educations.isEmpty()) {
+            return yOffset;
+        }
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        contentStream.newLineAtOffset(50, yOffset);
+        contentStream.showText("Ã‰ducation");
+        contentStream.endText();
+        yOffset -= 20;
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 12);
+        for (Education education : educations) {
+            contentStream.newLineAtOffset(50, yOffset);
+            String graduationDate = education.getGraduationDate() != null ?
+                    education.getGraduationDate().format(DATE_FORMATTER) : "PrÃ©sent";
+            contentStream.showText(education.getDegree() + " - " + education.getInstitution() +
+                    " (" + graduationDate + ")");
+            contentStream.newLineAtOffset(0, -15);
+            yOffset -= 20;
+        }
+        contentStream.endText();
+        return yOffset - 10;
+    }
+
+    private int addWorkExperienceSection(PDPageContentStream contentStream, List<WorkExperience> workExperiences, int yOffset) throws IOException {
+        if (workExperiences.isEmpty()) {
+            return yOffset;
+        }
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        contentStream.newLineAtOffset(50, yOffset);
+        contentStream.showText("ExpÃ©rience Professionnelle");
+        contentStream.endText();
+        yOffset -= 20;
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 12);
+        for (WorkExperience workExperience : workExperiences) {
+            contentStream.newLineAtOffset(50, yOffset);
+            String endDate = workExperience.getEndDate() != null ?
+                    workExperience.getEndDate().format(DATE_FORMATTER) : "PrÃ©sent";
+            contentStream.showText(workExperience.getJobTitle() + " - " +
+                    workExperience.getCompany() + " (" +
+                    workExperience.getStartDate().format(DATE_FORMATTER) +
+                    " - " + endDate + ")");
+            contentStream.newLineAtOffset(0, -15);
+            if (workExperience.getDescription() != null) {
+                contentStream.showText(workExperience.getDescription());
+                contentStream.newLineAtOffset(0, -15);
+            }
+            yOffset -= 40;
+        }
+        contentStream.endText();
+        return yOffset - 20;
+    }
+
+    private int addProjectsSection(PDPageContentStream contentStream, List<Project> projects, int yOffset) throws IOException {
+        if (projects.isEmpty()) {
+            return yOffset;
+        }
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        contentStream.newLineAtOffset(50, yOffset);
+        contentStream.showText("Projets");
+        contentStream.endText();
+        yOffset -= 20;
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 12);
+        for (Project project : projects) {
+            contentStream.newLineAtOffset(50, yOffset);
+            contentStream.showText(project.getName());
+            contentStream.newLineAtOffset(0, -15);
+            if (project.getDescription() != null) {
+                contentStream.showText(project.getDescription());
+                contentStream.newLineAtOffset(0, -15);
+            }
+            yOffset -= 30;
+        }
+        contentStream.endText();
+        return yOffset - 20;
+    }
+
+    private void addProfileSpecificSections(PDPageContentStream contentStream, CV cv, int yOffset) throws IOException {
+        switch (cv.getProgramType()) {
+            case ENGINEERING_IT:
+            case ENGINEERING_TELECOM:
+                addITEngineeringSection(contentStream, cv, yOffset);
+                break;
+            case ENGINEERING_ELECTROMECH:
+            case ENGINEERING_MECHATRONICS:
+                addMechanicalEngineeringSection(contentStream, cv, yOffset);
+                break;
+            case ENGINEERING_CIVIL:
+                addCivilEngineeringSection(contentStream, cv, yOffset);
+                break;
+            case LICENSE_BUSINESS_COMPUTING:
+            case LICENSE_MATH_APPLIED:
+                addTechnicalBusinessSection(contentStream, cv, yOffset);
+                break;
+            case MASTER_BUSINESS_ANALYTICS:
+            case MASTER_MDSI:
+                addBusinessAnalyticsSection(contentStream, cv, yOffset);
+                break;
+            case MASTER_CCA:
+            case MASTER_FIND:
+                addFinanceSection(contentStream, cv, yOffset);
+                break;
+            default:
+                addDefaultSection(contentStream, cv, yOffset);
+        }
+    }
+
+    private int addCertificatesSection(PDPageContentStream contentStream, List<Certificate> certificates, int yOffset) throws IOException {
+        if (certificates.isEmpty()) {
+            return yOffset;
+        }
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        contentStream.newLineAtOffset(50, yOffset);
+        contentStream.showText("Certifications");
+        contentStream.endText();
+        yOffset -= 20;
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 12);
+        for (Certificate certificate : certificates) {
+            contentStream.newLineAtOffset(50, yOffset);
+            String dateReceived = certificate.getDateReceived() != null ?
+                    certificate.getDateReceived().format(DATE_FORMATTER) : "";
+            contentStream.showText(certificate.getName() + " - " +
+                    certificate.getInstitution() +
+                    (dateReceived.isEmpty() ? "" : " (" + dateReceived + ")"));
+            contentStream.newLineAtOffset(0, -15);
+            yOffset -= 20;
+        }
+        contentStream.endText();
+        return yOffset - 20;
+    }
+
+    private int addLanguagesSection(PDPageContentStream contentStream, List<Language> languages, int yOffset) throws IOException {
+        if (languages.isEmpty()) {
+            return yOffset;
+        }
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        contentStream.newLineAtOffset(50, yOffset);
+        contentStream.showText("Langues");
+        contentStream.endText();
+        yOffset -= 20;
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 12);
+        for (Language language : languages) {
+            contentStream.newLineAtOffset(50, yOffset);
+            contentStream.showText(language.getName() + " - " +
+                    language.getProficiencyDescription());
+            contentStream.newLineAtOffset(0, -15);
+            yOffset -= 20;
+        }
+        contentStream.endText();
+        return yOffset - 20;
+    }
+
+    private void addSkillsSection(PDPageContentStream contentStream, List<String> skills, int yOffset) throws IOException {
+        if (skills.isEmpty()) {
+            return;
+        }
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        contentStream.newLineAtOffset(50, yOffset);
+        contentStream.showText("CompÃ©tences");
+        contentStream.endText();
+        yOffset -= 20;
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 12);
+        for (String skill : skills) {
+            contentStream.newLineAtOffset(50, yOffset);
+            contentStream.showText(skill);
+            contentStream.newLineAtOffset(0, -15);
+            yOffset -= 20;
+        }
+        contentStream.endText();
+    }
+
+    private void addMechanicalEngineeringSection(PDPageContentStream contentStream, CV cv, int yOffset) throws IOException {
+        // Pour le moment, utiliser la section par dÃ©faut
+        addDefaultSection(contentStream, cv, yOffset);
+    }
+
+    private void addCivilEngineeringSection(PDPageContentStream contentStream, CV cv, int yOffset) throws IOException {
+        // Pour le moment, utiliser la section par dÃ©faut
+        addDefaultSection(contentStream, cv, yOffset);
+    }
+
+    private void addTechnicalBusinessSection(PDPageContentStream contentStream, CV cv, int yOffset) throws IOException {
+        // Pour le moment, utiliser la section par dÃ©faut
+        addDefaultSection(contentStream, cv, yOffset);
+    }
+
+    private void addBusinessAnalyticsSection(PDPageContentStream contentStream, CV cv, int yOffset) throws IOException {
+        // Pour le moment, utiliser la section par dÃ©faut
+        addDefaultSection(contentStream, cv, yOffset);
+    }
+
+    private void addFinanceSection(PDPageContentStream contentStream, CV cv, int yOffset) throws IOException {
+        // Pour le moment, utiliser la section par dÃ©faut
+        addDefaultSection(contentStream, cv, yOffset);
+    }
+
+    private void addDefaultSection(PDPageContentStream contentStream, CV cv, int yOffset) throws IOException {
+        // Section vide pour le moment
+    }
+
+    private void addITEngineeringSection(PDPageContentStream contentStream, CV cv, int yOffset) throws IOException {
+        // Grouper les compÃ©tences par catÃ©gorie
+        Map<String, List<String>> skillCategories = new HashMap<>();
+        skillCategories.put("Langages de programmation", new ArrayList<>());
+        skillCategories.put("Frameworks & Technologies", new ArrayList<>());
+        skillCategories.put("Base de donnÃ©es", new ArrayList<>());
+        skillCategories.put("DevOps & Outils", new ArrayList<>());
+
+        // Trier les compÃ©tences
+        for (String skill : cv.getSkills()) {
+            if (skill.toLowerCase().contains("java") || skill.toLowerCase().contains("python") ||
+                    skill.toLowerCase().contains("c++") || skill.toLowerCase().contains("javascript")) {
+                skillCategories.get("Langages de programmation").add(skill);
+            } else if (skill.toLowerCase().contains("spring") || skill.toLowerCase().contains("angular") ||
+                    skill.toLowerCase().contains("react") || skill.toLowerCase().contains("node")) {
+                skillCategories.get("Frameworks & Technologies").add(skill);
+            } else if (skill.toLowerCase().contains("sql") || skill.toLowerCase().contains("mongodb") ||
+                    skill.toLowerCase().contains("oracle")) {
+                skillCategories.get("Base de donnÃ©es").add(skill);
+            } else {
+                skillCategories.get("DevOps & Outils").add(skill);
+            }
+        }
+
+        // Afficher les compÃ©tences par catÃ©gorie
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        contentStream.newLineAtOffset(50, yOffset);
+        contentStream.showText("CompÃ©tences Techniques");
+        contentStream.endText();
+        yOffset -= 20;
+
+        for (Map.Entry<String, List<String>> category : skillCategories.entrySet()) {
+            if (!category.getValue().isEmpty()) {
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                contentStream.newLineAtOffset(70, yOffset);
+                contentStream.showText(category.getKey() + ":");
+                contentStream.endText();
+                yOffset -= 15;
+
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, 11);
+                contentStream.newLineAtOffset(90, yOffset);
+                contentStream.showText(String.join(", ", category.getValue()));
+                contentStream.endText();
+                yOffset -= 20;
+            }
+        }
+
+        // Mettre en Ã©vidence les projets techniques
+        if (!cv.getProjects().isEmpty()) {
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+            contentStream.newLineAtOffset(50, yOffset);
+            contentStream.showText("Projets Techniques Significatifs");
+            contentStream.endText();
+            yOffset -= 20;
+
+            for (Project project : cv.getProjects()) {
+                if (project.getProjectType() == Project.ProjectType.PFE ||
+                        project.getProjectType() == Project.ProjectType.ACADEMIC) {
+
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                    contentStream.newLineAtOffset(70, yOffset);
+                    contentStream.showText(project.getName());
+                    contentStream.endText();
+                    yOffset -= 15;
+
+                    if (!project.getTechnologies().isEmpty()) {
+                        contentStream.beginText();
+                        contentStream.setFont(PDType1Font.HELVETICA, 11);
+                        contentStream.newLineAtOffset(90, yOffset);
+                        contentStream.showText("Technologies : " + String.join(", ", project.getTechnologies()));
+                        contentStream.endText();
+                        yOffset -= 15;
+                    }
+
+                    if (project.getDescription() != null) {
+                        contentStream.beginText();
+                        contentStream.setFont(PDType1Font.HELVETICA, 11);
+                        contentStream.newLineAtOffset(90, yOffset);
+                        contentStream.showText(project.getDescription());
+                        contentStream.endText();
+                        yOffset -= 20;
+                    }
+                }
+            }
+        }
+    }
+}
+
+==================================================
+
+Fichier: src\main\java\com\example\stage\ai\AIPromptBuilder.java
+Chemin complet: C:\Users\Sh-Pc\Desktop\HomeFORNOW\KHEDMA\src\main\java\com\example\stage\ai\AIPromptBuilder.java
+-----
+package com.example.stage.ai;
+
+import com.example.stage.model.CV;
+import java.time.format.DateTimeFormatter;
+
+public class AIPromptBuilder {
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public String buildAnalysisPrompt(CV cv) {
+        StringBuilder prompt = new StringBuilder();
+        prompt.append("Analyze this CV for a professional position\n\n");
+
+        // Personal Information
+        prompt.append("Personal Information:\n");
+        prompt.append("Name: ").append(cv.getName()).append("\n");
+        prompt.append("Email: ").append(cv.getEmail()).append("\n");
+        prompt.append("Phone: ").append(cv.getPhone()).append("\n");
+        prompt.append("Address: ").append(cv.getAddress()).append("\n");
+        if (cv.getLinkedin() != null && !cv.getLinkedin().isEmpty()) {
+            prompt.append("LinkedIn: ").append(cv.getLinkedin()).append("\n");
+        }
+        if (cv.getPortfolio() != null && !cv.getPortfolio().isEmpty()) {
+            prompt.append("Portfolio: ").append(cv.getPortfolio()).append("\n");
+        }
+
+        // Professional Summary
+        if (cv.getSummary() != null && !cv.getSummary().isEmpty()) {
+            prompt.append("\nProfessional Summary:\n");
+            prompt.append(cv.getSummary()).append("\n");
+        }
+
+        // Education
+        if (!cv.getEducations().isEmpty()) {
+            prompt.append("\nEducation:\n");
+            cv.getEducations().forEach(edu -> {
+                prompt.append("- ").append(edu.getDegree())
+                        .append(" from ").append(edu.getInstitution());
+                if (edu.getGraduationDate() != null) {
+                    prompt.append(" (")
+                            .append(edu.getGraduationDate().format(DATE_FORMATTER))
+                            .append(")");
+                }
+                prompt.append("\n");
+            });
+        }
+
+        // Work Experience
+        if (!cv.getWorkExperiences().isEmpty()) {
+            prompt.append("\nWork Experience:\n");
+            cv.getWorkExperiences().forEach(exp -> {
+                prompt.append("- ").append(exp.getJobTitle())
+                        .append(" at ").append(exp.getCompany());
+                if (exp.getStartDate() != null) {
+                    prompt.append(" (")
+                            .append(exp.getStartDate().format(DATE_FORMATTER));
+                    if (exp.getEndDate() != null) {
+                        prompt.append(" - ")
+                                .append(exp.getEndDate().format(DATE_FORMATTER));
+                    }
+                    prompt.append(")");
+                }
+                prompt.append("\n");
+                if (exp.getDescription() != null && !exp.getDescription().isEmpty()) {
+                    prompt.append("  ").append(exp.getDescription()).append("\n");
+                }
+            });
+        }
+
+        // Skills
+        if (!cv.getSkills().isEmpty()) {
+            prompt.append("\nSkills:\n");
+            cv.getSkills().forEach(skill -> prompt.append("- ").append(skill).append("\n"));
+        }
+
+        // Projects
+        if (!cv.getProjects().isEmpty()) {
+            prompt.append("\nProjects:\n");
+            cv.getProjects().forEach(project -> {
+                prompt.append("- ").append(project.getName()).append("\n");
+                if (project.getDescription() != null && !project.getDescription().isEmpty()) {
+                    prompt.append("  ").append(project.getDescription()).append("\n");
+                }
+            });
+        }
+
+        // Languages
+        if (!cv.getLanguages().isEmpty()) {
+            prompt.append("\nLanguages:\n");
+            cv.getLanguages().forEach(lang -> {
+                prompt.append("- ").append(lang.getName())
+                        .append(": ").append(lang.getProficiencyDescription())
+                        .append("\n");
+            });
+        }
+        // Analysis Request
+        prompt.append("\nPlease provide a detailed analysis of this CV, including:\n");
+        prompt.append("1. Overall presentation and organization\n");
+        prompt.append("2. Strength of qualifications and experience\n");
+        prompt.append("3. Skills assessment and relevance\n");
+        prompt.append("4. Areas for improvement\n");
+        prompt.append("5. Specific recommendations for enhancement\n");
+        prompt.append("6. Potential career paths based on the profile\n");
+
+        return prompt.toString();
+    }
+}
+==================================================
+
+Fichier: src\main\java\com\example\stage\model\CVRecommendation.java
+Chemin complet: C:\Users\Sh-Pc\Desktop\HomeFORNOW\KHEDMA\src\main\java\com\example\stage\model\CVRecommendation.java
+-----
+package com.example.stage.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CVRecommendation {/*
+    private String profileName;
+    private double matchScore;
+    private List<String> matchedSkills;
+    private List<String> missingSkills;
+    private List<String> suggestions;
+    private String detailedAnalysis;
+
+    public CVRecommendation() {
+        this.matchedSkills = new ArrayList<>();
+        this.missingSkills = new ArrayList<>();
+        this.suggestions = new ArrayList<>();
+    }
+
+    // Getters et Setters
+    public String getProfileName() { return profileName; }
+    public void setProfileName(String profileName) { this.profileName = profileName; }
+
+    public double getMatchScore() { return matchScore; }
+    public void setMatchScore(double matchScore) { this.matchScore = matchScore; }
+
+    public List<String> getMatchedSkills() { return new ArrayList<>(matchedSkills); }
+    public void setMatchedSkills(List<String> matchedSkills) {
+        this.matchedSkills = new ArrayList<>(matchedSkills);
+    }
+
+    public List<String> getMissingSkills() { return new ArrayList<>(missingSkills); }
+    public void setMissingSkills(List<String> missingSkills) {
+        this.missingSkills = new ArrayList<>(missingSkills);
+    }
+
+    public List<String> getSuggestions() { return new ArrayList<>(suggestions); }
+    public void setSuggestions(List<String> suggestions) {
+        this.suggestions = new ArrayList<>(suggestions);
+    }
+
+    public String getDetailedAnalysis() { return detailedAnalysis; }
+    public void setDetailedAnalysis(String detailedAnalysis) {
+        this.detailedAnalysis = detailedAnalysis;
+    }
+
+    // MÃ©thodes utilitaires
+    public void addMatchedSkill(String skill) {
+        if (skill != null && !skill.trim().isEmpty()) {
+            this.matchedSkills.add(skill.trim());
+        }
+    }
+
+    public void addMissingSkill(String skill) {
+        if (skill != null && !skill.trim().isEmpty()) {
+            this.missingSkills.add(skill.trim());
+        }
+    }
+
+    public void addSuggestion(String suggestion) {
+        if (suggestion != null && !suggestion.trim().isEmpty()) {
+            this.suggestions.add(suggestion.trim());
+        }
+    }*/
+}
+==================================================
+
+Fichier: src\main\java\com\example\stage\controller\Page2Controller.java
+Chemin complet: C:\Users\Sh-Pc\Desktop\HomeFORNOW\KHEDMA\src\main\java\com\example\stage\controller\Page2Controller.java
+-----
+package com.example.stage.controller;
+import java.util.ArrayList;
+import java.util.List;
+import com.example.stage.client.HuggingFaceClient;
+import com.example.stage.config.HuggingFaceConfig;
+import javafx.scene.control.ProgressIndicator;
+import java.time.LocalDate;
+import java.util.regex.Pattern;
+import com.example.stage.client.HuggingFaceClient;
+import com.example.stage.config.HuggingFaceConfig;
+import com.example.stage.model.*;
+import com.example.stage.service.PDFGenerationService;
+import com.example.stage.util.ResourceManager;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.NodeOrientation;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import javafx.collections.FXCollections;
+import javafx.util.Duration;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Page2Controller {
+    @FXML private Label skillsLabel;
+    @FXML private Label projectsLabel;
+    @FXML private Label certificatesLabel;
+    @FXML private Label languagesLabel;
+    @FXML private VBox skillsContainer;
+    @FXML private TextField skillsField;
+    @FXML private VBox projectsContainer;
+    @FXML private VBox certificatesContainer;
+    @FXML private VBox languagesContainer;
+    @FXML private Label timeUserLabel;
+    @FXML private TextField projectNameField;
+    @FXML private TextArea projectDescriptionArea;
+    @FXML private TextField certificateNameField;
+    @FXML private TextField certificateInstitutionField;
+    @FXML private DatePicker certificateDateField;
+    @FXML private TextField languageField;
+    @FXML private ComboBox<String> languageProficiencyField;
+    @FXML private ComboBox<String> languageComboBox;
+
+    @FXML private Button backButton;
+    @FXML private Button generatePDFButton;
+    @FXML private Button translateButton;
+    @FXML private Button autoFillButton;
+    @FXML private Label statusLabel;
+    @FXML private Button analyzeButton;
+    private static final int MAX_SKILLS = 10;
+    private static final int MAX_PROJECTS = 5;
+    private static final int MAX_CERTIFICATES = 5;
+    private static final int MAX_LANGUAGES = 5;
+    private static final int MAX_DESCRIPTION_LENGTH = 500;
+
+    private final PDFGenerationService pdfGenerationService;
+    private CV cv;
+
+    public Page2Controller() {
+        this.pdfGenerationService = new PDFGenerationService();
+        this.cv = new CV();
+    }
+    public void setCV(CV cv) {
+        this.cv = cv;
+        loadCVData();
+    }
+    @FXML
+    public void analyzeCV() {
+        // Show loading indicator
+        Label loadingLabel = new Label("Analyzing CV...");
+        ProgressIndicator progress = new ProgressIndicator();
+        progress.setMaxSize(30, 30);
+
+        HBox loadingBox = new HBox(10, progress, loadingLabel);
+        loadingBox.setAlignment(Pos.CENTER);
+
+        // Add loading indicator to the scene
+        VBox rootContainer = (VBox) skillsContainer.getParent().getParent();
+        rootContainer.getChildren().add(loadingBox);
+
+        // Create background thread
+        new Thread(() -> {
+            try {
+                // Update CV model with current data
+                updateCVModel();
+
+                // Initialize Hugging Face components
+                HuggingFaceConfig config = HuggingFaceConfig.getInstance();
+                HuggingFaceClient client = new HuggingFaceClient(config);
+
+                // Create a prompt for CV analysis
+                String prompt = "Analyze this CV for strengths and weaknesses:\n" +
+                        "Skills: " + String.join(", ", cv.getSkills()) + "\n" +
+                        "Projects: " + cv.getProjects().size() + " projects including " +
+                        (cv.getProjects().isEmpty() ? "" : cv.getProjects().get(0).getName()) + "\n" +
+                        "Certificates: " + cv.getCertificates().size() + " certificates\n" +
+                        "Languages: " + cv.getLanguages().size() + " languages";
+
+                // Call the Hugging Face API
+                String response = client.generateText(prompt);
+
+                Platform.runLater(() -> {
+                    // Remove loading indicator
+                    rootContainer.getChildren().remove(loadingBox);
+
+                    // Show results in dialog
+                    showAnalysisResults(response);
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    // Remove loading indicator
+                    rootContainer.getChildren().remove(loadingBox);
+
+                    // Show error
+                    showAlert(Alert.AlertType.ERROR, "Analysis Error",
+                            "Failed to analyze CV: " + e.getMessage());
+                });
+            }
+        }).start();
+    }
+    private void showAnalysisResults(String analysis) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("CV Analysis Results");
+        alert.setHeaderText("AI-Generated CV Analysis");
+
+        // Create a ScrollPane for the analysis text
+        TextArea textArea = new TextArea(analysis);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        textArea.setPrefWidth(400);
+        textArea.setPrefHeight(300);
+
+        ScrollPane scrollPane = new ScrollPane(textArea);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
+        alert.getDialogPane().setContent(scrollPane);
+        alert.showAndWait();
+    }
+    @FXML
+    private void initialize() {
+        setupContainers();
+        setupLanguageProficiencyComboBox();
+        setupValidations();
+        setupProjectDescriptionLimit();
+        setupSkillField();
+        updateTranslations();
+        Button analyzeButton = new Button("AI Analysis");
+        analyzeButton.setStyle("-fx-background-color: #E31A22; -fx-text-fill: white;");
+        analyzeButton.setOnAction(e -> analyzeCV());
+        HBox buttonArea = (HBox) generatePDFButton.getParent();
+        buttonArea.getChildren().add(analyzeButton);
+
+
+
+
+    }
+
+
+
+    private void setupLanguageComboBox() {
+        if (languageComboBox != null) {
+            languageComboBox.getItems().addAll("English", "French", "German", "Arabic");
+            languageComboBox.setValue("English");
+        }
+    }
+    private void setupContainers() {
+        if (skillsContainer == null) skillsContainer = new VBox(5);
+        if (projectsContainer == null) projectsContainer = new VBox(5);
+        if (certificatesContainer == null) certificatesContainer = new VBox(5);
+        if (languagesContainer == null) languagesContainer = new VBox(5);
+    }
+
+    private void setupLanguageProficiencyComboBox() {
+        if (languageProficiencyField != null) {
+            languageProficiencyField.setItems(FXCollections.observableArrayList(
+                    "A1 (Beginner)",
+                    "A2 (Elementary)",
+                    "B1 (Intermediate)",
+                    "B2 (Upper Intermediate)",
+                    "C1 (Advanced)",
+                    "C2 (Mastery)"
+            ));
+        }
+    }
+    @FXML
+    private void translatePage() {
+        String selectedLanguage = languageComboBox.getValue();
+        Locale locale = switch (selectedLanguage) {
+            case "French" -> Locale.FRENCH;
+            case "German" -> Locale.GERMAN;
+            case "Arabic" -> Locale.forLanguageTag("ar");
+            default -> Locale.ENGLISH;
+        };
+        ResourceManager.setLocale(locale);
+        updateTranslations();
+    }
+
+    private void updateTranslations() {
+        // Mettre Ã  jour les labels
+        skillsLabel.setText(ResourceManager.getString("skills"));
+        projectsLabel.setText(ResourceManager.getString("projects"));
+        certificatesLabel.setText(ResourceManager.getString("certificates"));
+        languagesLabel.setText(ResourceManager.getString("languages"));
+
+        // Mettre Ã  jour les boutons
+        backButton.setText(ResourceManager.getString("back"));
+        generatePDFButton.setText(ResourceManager.getString("generate_pdf"));
+        translateButton.setText(ResourceManager.getString("translate"));
+        autoFillButton.setText(ResourceManager.getString("auto_fill"));
+
+        // Mettre Ã  jour les textes des champs
+        skillsField.setPromptText(ResourceManager.getString("enter_skill"));
+        projectNameField.setPromptText(ResourceManager.getString("enter_project_name"));
+        projectDescriptionArea.setPromptText(ResourceManager.getString("enter_project_description"));
+        certificateNameField.setPromptText(ResourceManager.getString("enter_certificate_name"));
+        certificateInstitutionField.setPromptText(ResourceManager.getString("enter_institution"));
+        languageField.setPromptText(ResourceManager.getString("enter_language"));
+    }
+
+    private void setupValidations() {
+        // Garder uniquement la validation du nombre maximum de compÃ©tences
+        if (skillsField != null) {
+            skillsField.textProperty().addListener((obs, old, newVal) -> {
+                if (skillsContainer.getChildren().size() >= MAX_SKILLS) {
+                    skillsField.setText(old);
+                    showAlert("Info", "Maximum de compÃ©tences atteint");
+                }
+            });
+        }
+    }
+
+    private void showAlert(String title, String content) {
+        showAlert(Alert.AlertType.INFORMATION, title, content);
+    }
+
+    private void setupProjectDescriptionLimit() {
+        if (projectDescriptionArea != null) {
+            projectDescriptionArea.textProperty().addListener((obs, old, newVal) -> {
+                if (newVal.length() > MAX_DESCRIPTION_LENGTH) {
+                    projectDescriptionArea.setText(old);
+                    showAlert(Alert.AlertType.WARNING, "Text Limit",
+                            "Project description cannot exceed " + MAX_DESCRIPTION_LENGTH + " characters.");
+                }
+            });
+        }
+    }
+
+    @FXML
+    private void addSkill() {
+        String skill = skillsField.getText().trim();
+
+        if (skill.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Skill cannot be empty.");
+            return;
+        }
+
+        if (skillsContainer.getChildren().size() >= MAX_SKILLS) {
+            showAlert(Alert.AlertType.WARNING, "Limit Reached",
+                    "Maximum number of skills (" + MAX_SKILLS + ") reached.");
+            return;
+        }
+
+        HBox skillEntry = new HBox(10);
+        skillEntry.setAlignment(Pos.CENTER_LEFT);
+        skillEntry.setPrefWidth(520);
+        skillEntry.setPadding(new Insets(10));
+        skillEntry.setStyle("-fx-border-color: #E8E8E8; -fx-border-radius: 5; -fx-background-color: #FFFFFF");
+
+        Label skillLabel = new Label(skill);
+        skillLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px");
+        skillLabel.setMaxWidth(400);
+
+        Button removeButton = createRemoveButton(skillEntry);
+        removeButton.setPrefWidth(80);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        skillEntry.getChildren().addAll(skillLabel, spacer, removeButton);
+        skillsContainer.getChildren().add(skillEntry);
+
+        skillsField.clear();
+        skillsField.requestFocus();
+    }
+    private void setupSkillField() {
+        if (skillsField != null) {
+            // Set node orientation to LEFT_TO_RIGHT for consistent behavior
+            skillsField.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+
+            // Simple validation for length only
+            skillsField.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null && newValue.length() > 50) {
+                    skillsField.setText(oldValue);
+                }
+            });
+
+            // Handle Enter key to add skill
+            skillsField.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ENTER && !skillsField.getText().trim().isEmpty()) {
+                    addSkill();
+                }
+            });
+        }
+    }
+
+    @FXML
+    private void addProject() {
+        if (!validateProjectFields()) return;
+
+        VBox projectEntry = new VBox(10);
+        projectEntry.setPadding(new Insets(10));
+        projectEntry.setPrefWidth(520);
+        projectEntry.setStyle("-fx-border-color: #E8E8E8; -fx-border-radius: 5; -fx-background-color: #FFFFFF");
+
+        HBox header = new HBox(10);
+        header.setAlignment(Pos.CENTER_LEFT);
+
+        Label nameLabel = new Label(projectNameField.getText());
+        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px");
+
+        Button removeButton = createRemoveButton(projectEntry);
+        removeButton.setPrefWidth(80);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        header.getChildren().addAll(nameLabel, spacer, removeButton);
+
+        TextArea descArea = new TextArea(projectDescriptionArea.getText());
+        descArea.setWrapText(true);
+        descArea.setPrefRowCount(3);
+        descArea.setPrefWidth(500);
+        descArea.setEditable(false);
+        descArea.setStyle("-fx-control-inner-background: #F8F8F8");
+
+        projectEntry.getChildren().addAll(header, descArea);
+        projectsContainer.getChildren().add(projectEntry);
+        clearProjectFields();
+    }
+
+
+    @FXML
+    private void addCertificate() {
+        if (!validateCertificateFields()) return;
+
+        VBox certEntry = new VBox(10);
+        certEntry.setPadding(new Insets(10));
+        certEntry.setPrefWidth(520);
+        certEntry.setStyle("-fx-border-color: #E8E8E8; -fx-border-radius: 5; -fx-background-color: #FFFFFF");
+
+        HBox header = new HBox(10);
+        header.setAlignment(Pos.CENTER_LEFT);
+
+        VBox certInfo = new VBox(5);
+        Label nameLabel = new Label(certificateNameField.getText());
+        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px");
+        Label institutionLabel = new Label("Institution: " + certificateInstitutionField.getText());
+        institutionLabel.setStyle("-fx-font-size: 12px");
+        Label dateLabel = new Label("Date: " + certificateDateField.getValue().toString());
+        dateLabel.setStyle("-fx-font-size: 12px");
+        certInfo.getChildren().addAll(nameLabel, institutionLabel, dateLabel);
+
+        Button removeButton = createRemoveButton(certEntry);
+        removeButton.setPrefWidth(80);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        header.getChildren().addAll(certInfo, spacer, removeButton);
+        certEntry.getChildren().add(header);
+
+        certificatesContainer.getChildren().add(certEntry);
+        clearCertificateFields();
+    }
+    @FXML
+    private void addLanguage() {
+        if (!validateLanguageFields()) return;
+
+        HBox langEntry = new HBox(10);
+        langEntry.setAlignment(Pos.CENTER_LEFT);
+        langEntry.setPrefWidth(520);
+        langEntry.setPadding(new Insets(10));
+        langEntry.setStyle("-fx-border-color: #E8E8E8; -fx-border-radius: 5; -fx-background-color: #FFFFFF");
+
+        VBox langInfo = new VBox(5);
+        Label langLabel = new Label(languageField.getText());
+        langLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px");
+        Label profLabel = new Label("Level: " + languageProficiencyField.getValue());
+        profLabel.setStyle("-fx-font-size: 12px");
+        langInfo.getChildren().addAll(langLabel, profLabel);
+
+        Button removeButton = createRemoveButton(langEntry);
+        removeButton.setPrefWidth(80);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        langEntry.getChildren().addAll(langInfo, spacer, removeButton);
+        languagesContainer.getChildren().add(langEntry);
+        clearLanguageFields();
+    }
+
+    private Button createRemoveButton(Node parent) {
+        Button removeButton = new Button("Remove");
+        removeButton.setStyle("-fx-background-color: #E31A22; -fx-text-fill: white;");
+        removeButton.setPrefWidth(80);
+
+        if (parent instanceof HBox) {
+            removeButton.setOnAction(e -> skillsContainer.getChildren().remove(parent));
+        } else {
+            removeButton.setOnAction(e -> ((VBox) parent.getParent()).getChildren().remove(parent));
+        }
+
+        return removeButton;
+    }
+    private void updateCVModel() {
+        // Update skills
+        cv.getSkills().clear();
+        skillsContainer.getChildren().forEach(node -> {
+            if (node instanceof HBox) {
+                HBox skillEntry = (HBox) node;
+                skillEntry.getChildren().stream()
+                        .filter(child -> child instanceof Label)
+                        .map(child -> (Label) child)
+                        .findFirst()
+                        .ifPresent(label -> cv.addSkill(label.getText()));
+            }
+        });
+
+        // Update projects
+        cv.getProjects().clear();
+        projectsContainer.getChildren().forEach(node -> {
+            if (node instanceof VBox) {
+                VBox projectEntry = (VBox) node;
+                HBox header = (HBox) projectEntry.getChildren().get(0);
+                Label nameLabel = (Label) header.getChildren().get(0);
+                TextArea descArea = (TextArea) projectEntry.getChildren().get(1);
+
+                Project project = new Project(
+                        nameLabel.getText(),
+                        descArea.getText()
+                );
+                cv.addProject(project);
+            }
+        });
+
+        // Update certificates
+        cv.getCertificates().clear();
+        certificatesContainer.getChildren().forEach(node -> {
+            if (node instanceof VBox) {
+                VBox certEntry = (VBox) node;
+                HBox header = (HBox) certEntry.getChildren().get(0);
+                VBox certInfo = (VBox) header.getChildren().get(0);
+
+                Label nameLabel = (Label) certInfo.getChildren().get(0);
+                Label institutionLabel = (Label) certInfo.getChildren().get(1);
+                Label dateLabel = (Label) certInfo.getChildren().get(2);
+
+                String name = nameLabel.getText();
+                String institution = institutionLabel.getText().replace("Institution: ", "");
+                String dateText = dateLabel.getText().replace("Date: ", "");
+                LocalDate date = LocalDate.parse(dateText);
+
+                Certificate certificate = new Certificate(
+                        name,
+                        institution,
+                        date,
+                        Certificate.CertificateType.TECHNICAL
+                );
+                cv.addCertificate(certificate);
+            }
+        });
+
+        // Update languages
+        cv.getLanguages().clear();
+        languagesContainer.getChildren().forEach(node -> {
+            if (node instanceof HBox) {
+                HBox langEntry = (HBox) node;
+                VBox langInfo = (VBox) langEntry.getChildren().get(0);
+
+                Label langLabel = (Label) langInfo.getChildren().get(0);
+                Label profLabel = (Label) langInfo.getChildren().get(1);
+
+                String languageName = langLabel.getText();
+                String proficiency = profLabel.getText().replace("Level: ", "");
+
+                // Extraire le niveau de compÃ©tence (A1, A2, B1, B2, C1, C2)
+                String level = proficiency.substring(0, 2);
+                Language.ProficiencyLevel profLevel = Language.ProficiencyLevel.valueOf(level);
+
+                Language language = new Language(languageName, profLevel);
+                cv.addLanguage(language);
+            }
+        });
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private boolean validateProjectFields() {
+        return !projectNameField.getText().trim().isEmpty() &&
+                !projectDescriptionArea.getText().trim().isEmpty();
+    }
+
+    private boolean validateCertificateFields() {
+        return !certificateNameField.getText().trim().isEmpty() &&
+                certificateDateField.getValue() != null;
+    }
+
+    private boolean validateLanguageFields() {
+        return !languageField.getText().trim().isEmpty() &&
+                languageProficiencyField.getValue() != null;
+    }
+    private void clearProjectFields() {
+        projectNameField.clear();
+        projectDescriptionArea.clear();
+    }
+
+    private void clearCertificateFields() {
+        certificateNameField.clear();
+        certificateInstitutionField.clear();
+        certificateDateField.setValue(null);
+    }
+
+    private void clearLanguageFields() {
+        languageField.clear();
+        languageProficiencyField.setValue(null);
+    }
+
+    @FXML
+    private void generatePDF() {
+        try {
+            // Mettre Ã  jour le modÃ¨le CV avec les donnÃ©es actuelles
+            updateCVModel();
+
+            // CrÃ©er le dossier output s'il n'existe pas
+            File outputDir = new File("output");
+            if (!outputDir.exists()) {
+                outputDir.mkdirs();
+            }
+
+            // CrÃ©er un nom de fichier unique avec le nom d'utilisateur et un timestamp
+            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+            String userName = cv.getName().replaceAll("[^a-zA-Z0-9]", "_");
+            String fileName = String.format("cv_%s_%s.pdf", userName, timestamp);
+            String filePath = "output" + File.separator + fileName;
+
+            // GÃ©nÃ©rer le PDF
+            pdfGenerationService.generatePDF(cv, filePath);
+
+            // Afficher une alerte de succÃ¨s avec le chemin du fichier
+            showAlert(Alert.AlertType.INFORMATION, "SuccÃ¨s",
+                    "CV gÃ©nÃ©rÃ© avec succÃ¨s!\nChemin du fichier:\n" + new File(filePath).getAbsolutePath());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Ã‰chec de la gÃ©nÃ©ration du PDF: " + e.getMessage());
+        }
+    }
+
+    private void loadCVData() {
+        if (cv == null) return;
+
+        Platform.runLater(() -> {
+            // Load skills
+            cv.getSkills().forEach(skill -> {
+                HBox skillEntry = new HBox(10);
+                Label skillLabel = new Label(skill);
+                Button removeButton = createRemoveButton(skillEntry);
+                skillEntry.getChildren().addAll(skillLabel, removeButton);
+                skillsContainer.getChildren().add(skillEntry);
+            });
+
+            // Load projects
+            cv.getProjects().forEach(project -> {
+                GridPane projectEntry = new GridPane();
+                projectEntry.setHgap(10);
+                projectEntry.setVgap(10);
+
+                Label nameLabel = new Label(project.getName());
+                TextArea descArea = new TextArea(project.getDescription());
+                descArea.setWrapText(true);
+                descArea.setPrefRowCount(2);
+                descArea.setEditable(false);
+
+                projectEntry.add(new Label("Project:"), 0, 0);
+                projectEntry.add(nameLabel, 1, 0);
+                projectEntry.add(new Label("Description:"), 0, 1);
+                projectEntry.add(descArea, 1, 1);
+
+                Button removeButton = createRemoveButton(projectEntry);
+                projectEntry.add(removeButton, 1, 2);
+
+                projectsContainer.getChildren().add(projectEntry);
+            });
+            // Load certificates
+            cv.getCertificates().forEach(certificate -> {
+                GridPane certificateEntry = createCertificateEntry(certificate);
+                certificatesContainer.getChildren().add(certificateEntry);
+            });
+
+            // Load languages
+            cv.getLanguages().forEach(language -> {
+                GridPane languageEntry = createLanguageEntry(language);
+                languagesContainer.getChildren().add(languageEntry);
+            });
+        });
+    }
+
+    private GridPane createCertificateEntry(Certificate certificate) {
+        GridPane entry = new GridPane();
+        entry.setHgap(10);
+        entry.setVgap(10);
+
+        entry.add(new Label("Certificate:"), 0, 0);
+        entry.add(new Label(certificate.getName()), 1, 0);
+        entry.add(new Label("Institution:"), 0, 1);
+        entry.add(new Label(certificate.getInstitution()), 1, 1);
+        entry.add(new Label("Date:"), 0, 2);
+        entry.add(new Label(certificate.getDateReceived().toString()), 1, 2);
+
+        Button removeButton = createRemoveButton(entry);
+        entry.add(removeButton, 1, 3);
+
+        return entry;
+    }
+
+    private GridPane createLanguageEntry(Language language) {
+        GridPane entry = new GridPane();
+        entry.setHgap(10);
+        entry.setVgap(10);
+
+        entry.add(new Label("Language:"), 0, 0);
+        entry.add(new Label(language.getName()), 1, 0);
+        entry.add(new Label("Proficiency:"), 0, 1);
+        entry.add(new Label(language.getProficiencyDescription()), 1, 1);
+
+        Button removeButton = createRemoveButton(entry);
+        entry.add(removeButton, 1, 2);
+
+        return entry;
+    }
+
+    private Node getNodeByRowColumn(GridPane gridPane, int row, int column) {
+        for (Node node : gridPane.getChildren()) {
+            Integer rowIndex = GridPane.getRowIndex(node);
+            Integer columnIndex = GridPane.getColumnIndex(node);
+
+            // Handle null indices (default to 0)
+            if (rowIndex == null) rowIndex = 0;
+            if (columnIndex == null) columnIndex = 0;
+
+            if (rowIndex == row && columnIndex == column) {
+                return node;
+            }
+        }
+        return null;
+    }
+    @FXML
+    public void goToPage1(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/stage/page1.fxml"));
+            AnchorPane page1 = loader.load();
+            Scene scene = new Scene(page1, 600, 900);
+            Stage stage = (Stage) backButton.getScene().getWindow();
+
+            // Ajouter une transition de fondu
+            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), page1);
+            fadeTransition.setFromValue(0.0);
+            fadeTransition.setToValue(1.0);
+            fadeTransition.play();
+
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Navigation Error",
+                    "Could not return to previous page: " + e.getMessage());
+        }
+    }
+
+
+    @FXML
+    public void showProjectHelp(ActionEvent actionEvent) {
+        showAlert(Alert.AlertType.INFORMATION, "Project Help",
+                "Projects should include:\n" +
+                        "- A clear, concise name\n" +
+                        "- Detailed description (max 500 characters)\n" +
+                        "- Key achievements and technologies used\n" +
+                        "- Your role and responsibilities\n\n" +
+                        "Tips:\n" +
+                        "- Use action verbs to start descriptions\n" +
+                        "- Include measurable outcomes\n" +
+                        "- Highlight technical skills used"
+        );
+    }
+
+    @FXML
+    public void showSkillsHelp(ActionEvent actionEvent) {
+        showAlert(Alert.AlertType.INFORMATION, "Skills Help",
+                "Skills tips:\n" +
+                        "- List relevant technical skills\n" +
+                        "- Include both hard and soft skills\n" +
+                        "- Be specific (e.g., 'Java' instead of 'Programming')\n" +
+                        "- List skills you're comfortable discussing\n" +
+                        "- Maximum 10 skills allowed\n\n" +
+                        "Click 'Auto Fill' to see example skills."
+        );
+    }
+
+    @FXML
+    public void translatePage(ActionEvent actionEvent) {
+        showAlert(Alert.AlertType.INFORMATION, "Translation",
+                "Translation feature coming soon!\n" +
+                        "This will allow you to translate your CV content to different languages.");
+    }
+
+    @FXML
+    public void autoFillForm(ActionEvent actionEvent) {
+        // Show loading indicator
+        Label loadingLabel = new Label("Generating content...");
+        ProgressIndicator progress = new ProgressIndicator();
+        progress.setMaxSize(30, 30);
+
+        HBox loadingBox = new HBox(10, progress, loadingLabel);
+        loadingBox.setAlignment(Pos.CENTER);
+
+        // Add loading indicator to the scene
+        VBox rootContainer = (VBox) skillsContainer.getParent().getParent();
+        rootContainer.getChildren().add(loadingBox);
+
+        // Create background thread to avoid freezing UI
+        new Thread(() -> {
+            try {
+                // Initialize Hugging Face components
+                HuggingFaceConfig config = HuggingFaceConfig.getInstance();
+                HuggingFaceClient client = new HuggingFaceClient(config);
+
+                // Create a simple prompt
+                String prompt = "Generate 10 technical skills for a software developer, " +
+                        "2 software projects with brief descriptions, " +
+                        "3 relevant IT certifications, and " +
+                        "3 languages with proficiency levels (A1, A2, B1, B2, C1, C2).";
+
+                // Call Hugging Face API
+                String response = client.generateText(prompt);
+
+                // Use AI response if successful, otherwise use sample data
+                boolean useAiResponse = response != null && !response.isEmpty() && response.length() > 20;
+
+                Platform.runLater(() -> {
+                    try {
+                        // Remove loading indicator
+                        rootContainer.getChildren().remove(loadingBox);
+
+                        if (useAiResponse) {
+                            // Process AI response - very simple approach
+                            processAndDisplayAIResponse(response);
+                        } else {
+                            // Fall back to sample data
+                            useSampleData();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        showAlert(Alert.AlertType.ERROR, "Error",
+                                "Failed to process AI response: " + e.getMessage());
+                        useSampleData();
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    // Remove loading indicator
+                    rootContainer.getChildren().remove(loadingBox);
+
+                    // Show error and use sample data
+                    showAlert(Alert.AlertType.WARNING, "AI Generation Failed",
+                            "Using sample data instead: " + e.getMessage());
+                    useSampleData();
+                });
+            }
+        }).start();
+    }
+
+    // Process AI response and display in UI
+    private void processAndDisplayAIResponse(String response) {
+        // Clear existing entries
+        skillsContainer.getChildren().clear();
+        projectsContainer.getChildren().clear();
+        certificatesContainer.getChildren().clear();
+        languagesContainer.getChildren().clear();
+
+        // Simple text extraction - find lines that look like skills, projects, etc.
+        String[] lines = response.split("\\n");
+
+        // Process skills
+        for (String line : lines) {
+            String trimmedLine = line.trim();
+
+            // Skip empty lines and lines that are too short
+            if (trimmedLine.isEmpty() || trimmedLine.length() < 3) continue;
+
+            // Try to detect what type of content this is
+            if (trimmedLine.toLowerCase().contains("skill") ||
+                    isCommonSkill(trimmedLine)) {
+                // Looks like a skill
+                String skill = extractContentFromLine(trimmedLine);
+                skillsField.setText(skill);
+                addSkill();
+            }
+            else if (trimmedLine.toLowerCase().contains("project") ||
+                    trimmedLine.contains(":") && trimmedLine.length() > 20) {
+                // Looks like a project - try to split into name and description
+                String[] parts = trimmedLine.split(":|â€“|-", 2);
+                if (parts.length > 1) {
+                    projectNameField.setText(parts[0].trim());
+                    projectDescriptionArea.setText(parts[1].trim());
+                    addProject();
+                }
+            }
+            else if (trimmedLine.toLowerCase().contains("certif")) {
+                // Looks like a certificate
+                String cert = extractContentFromLine(trimmedLine);
+                certificateNameField.setText(cert);
+                certificateInstitutionField.setText("Sample Institution");
+                certificateDateField.setValue(LocalDate.now().minusMonths(3));
+                addCertificate();
+            }
+            else if (trimmedLine.toLowerCase().contains("language") ||
+                    isCommonLanguage(trimmedLine)) {
+                // Looks like a language
+                String lang = extractContentFromLine(trimmedLine);
+                String proficiency = determineProficiency(trimmedLine);
+
+                languageField.setText(lang);
+                languageProficiencyField.setValue(proficiency);
+                addLanguage();
+            }
+        }
+
+        // If we didn't find enough content, add some sample data
+        if (skillsContainer.getChildren().size() < 3) {
+            // Use sample skills
+            String[] sampleSkills = {"Java Programming", "Spring Boot", "RESTful APIs"};
+            for (String skill : sampleSkills) {
+                skillsField.setText(skill);
+                addSkill();
+            }
+        }
+
+        if (projectsContainer.getChildren().size() < 1) {
+            // Use sample project
+            projectNameField.setText("CV Generator Application");
+            projectDescriptionArea.setText("A JavaFX application for creating and managing professional CVs with PDF export capabilities.");
+            addProject();
+        }
+
+        if (certificatesContainer.getChildren().size() < 1) {
+            // Use sample certificate
+            certificateNameField.setText("Oracle Certified Professional: Java SE 11");
+            certificateInstitutionField.setText("Oracle");
+            certificateDateField.setValue(LocalDate.now().minusMonths(6));
+            addCertificate();
+        }
+
+        if (languagesContainer.getChildren().size() < 1) {
+            // Use sample language
+            languageField.setText("English");
+            languageProficiencyField.setValue("B2 (Upper Intermediate)");
+            addLanguage();
+        }
+    }
+
+    // Helper methods
+    private String extractContentFromLine(String line) {
+        // Remove numbers, bullets, etc.
+        return line.replaceAll("^\\d+\\.\\s*", "")
+                .replaceAll("^[â€¢\\-\\*]\\s*", "")
+                .replaceAll("(?i)^(skills?|certif\\w+|language)\\s*:?\\s*", "")
+                .trim();
+    }
+
+    private String determineProficiency(String line) {
+        line = line.toLowerCase();
+        if (line.contains("a1") || line.contains("beginner")) {
+            return "A1 (Beginner)";
+        } else if (line.contains("a2") || line.contains("elementary")) {
+            return "A2 (Elementary)";
+        } else if (line.contains("b1") || (line.contains("intermediate") && !line.contains("upper"))) {
+            return "B1 (Intermediate)";
+        } else if (line.contains("b2") || line.contains("upper intermediate")) {
+            return "B2 (Upper Intermediate)";
+        } else if (line.contains("c1") || line.contains("advanced")) {
+            return "C1 (Advanced)";
+        } else if (line.contains("c2") || line.contains("native") || line.contains("fluent") || line.contains("mastery")) {
+            return "C2 (Mastery)";
+        }
+        // Default
+        return "B2 (Upper Intermediate)";
+    }
+
+    private boolean isCommonSkill(String text) {
+        text = text.toLowerCase();
+        return text.contains("java") || text.contains("python") || text.contains("javascript") ||
+                text.contains("angular") || text.contains("react") || text.contains("sql") ||
+                text.contains("spring") || text.contains("html") || text.contains("css") ||
+                text.contains("git") || text.contains("docker") || text.contains("agile");
+    }
+
+    private boolean isCommonLanguage(String text) {
+        text = text.toLowerCase();
+        return text.contains("english") || text.contains("french") || text.contains("arabic") ||
+                text.contains("spanish") || text.contains("german") || text.contains("chinese") ||
+                text.contains("japanese") || text.contains("russian") || text.contains("portuguese");
+    }
+
+    // Use sample data (your existing method)
+    private void useSampleData() {
+        // Clear existing entries
+        skillsContainer.getChildren().clear();
+        projectsContainer.getChildren().clear();
+        certificatesContainer.getChildren().clear();
+        languagesContainer.getChildren().clear();
+
+        // Add sample skills
+        String[] sampleSkills = {
+                "Java Programming", "JavaFX", "Spring Boot",
+                "Git", "SQL", "Problem Solving",
+                "Web Development", "RESTful APIs",
+                "Software Design", "Agile Methodologies"
+        };
+
+        for (String skill : sampleSkills) {
+            skillsField.setText(skill);
+            addSkill();
+        }
+
+        // Add sample projects
+        Project[] sampleProjects = {
+                new Project("CV Builder Application",
+                        "Developed a full-featured CV management system using JavaFX. " +
+                                "Implemented PDF generation, form validation, and data persistence. " +
+                                "The application supports multiple languages and custom templates."),
+                new Project("E-Commerce Platform",
+                        "Built a scalable e-commerce solution with Spring Boot and MySQL. " +
+                                "Features include user authentication, product management, " +
+                                "shopping cart functionality, and secure payment integration.")
+        };
+
+        for (Project project : sampleProjects) {
+            projectNameField.setText(project.getName());
+            projectDescriptionArea.setText(project.getDescription());
+            addProject();
+        }
+
+        // Add sample certificates
+        Object[][] sampleCertificates = {
+                {"Oracle Certified Professional: Java SE 11", "Oracle", LocalDate.now().minusMonths(6)},
+                {"AWS Certified Developer - Associate", "Amazon Web Services", LocalDate.now().minusMonths(3)},
+                {"Spring Framework Certification", "VMware", LocalDate.now().minusMonths(1)}
+        };
+
+        for (Object[] cert : sampleCertificates) {
+            certificateNameField.setText((String)cert[0]);
+            certificateInstitutionField.setText((String)cert[1]);
+            certificateDateField.setValue((LocalDate)cert[2]);
+            addCertificate();
+        }
+
+        // Add sample languages
+        Object[][] sampleLanguages = {
+                {"English", "C1 (Advanced)"},
+                {"French", "B2 (Upper Intermediate)"},
+                {"Arabic", "C2 (Mastery)"}
+        };
+
+        for (Object[] lang : sampleLanguages) {
+            languageField.setText((String)lang[0]);
+            languageProficiencyField.setValue((String)lang[1]);
+            addLanguage();
+        }
+    }
+    // Simple extraction methods - these don't need to be perfect
+    private List<String> extractSkills(String response) {
+        List<String> skills = new ArrayList<>();
+        // Try to find skills listed with bullets, numbers, or in arrays
+        Pattern pattern = Pattern.compile("skills?[^:]*:.*?\\[?([^\\]\\}]*)\\]?", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(response);
+
+        if (matcher.find()) {
+            String skillsText = matcher.group(1);
+            // Split by common delimiters
+            String[] parts = skillsText.split("[,\"\\n\\r]+");
+
+            for (String part : parts) {
+                String skill = part.trim().replaceAll("[\\d\\.\\-â€¢\\*\\s]+", " ").trim();
+                if (!skill.isEmpty() && skill.length() > 2 && !skill.equalsIgnoreCase("skills")) {
+                    skills.add(skill);
+                    if (skills.size() >= 10) break;
+                }
+            }
+        }
+
+        return skills;
+    }
+
+    private List<Project> extractProjects(String response) {
+        List<Project> projects = new ArrayList<>();
+
+        // Try to find project names and descriptions
+        Pattern pattern = Pattern.compile("project[^:]*:.*?\\{([^\\}]*)\\}", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(response);
+
+        while (matcher.find() && projects.size() < 2) {
+            String projectText = matcher.group(1);
+
+            // Try to extract name and description
+            String name = "Sample Project";
+            String description = "Project description not available";
+
+            Pattern namePattern = Pattern.compile("name[^:]*:\\s*[\"']?([^\"',}]+)[\"']?", Pattern.CASE_INSENSITIVE);
+            Matcher nameMatcher = namePattern.matcher(projectText);
+            if (nameMatcher.find()) {
+                name = nameMatcher.group(1).trim();
+            }
+
+            Pattern descPattern = Pattern.compile("description[^:]*:\\s*[\"']?([^\"'}]+)[\"']?", Pattern.CASE_INSENSITIVE);
+            Matcher descMatcher = descPattern.matcher(projectText);
+            if (descMatcher.find()) {
+                description = descMatcher.group(1).trim();
+            }
+
+            projects.add(new Project(name, description));
+        }
+
+        return projects;
+    }
+
+    private List<Certificate> extractCertificates(String response) {
+        List<Certificate> certificates = new ArrayList<>();
+        LocalDate now = LocalDate.now();
+
+        // Try to find certificates
+        Pattern pattern = Pattern.compile("certif[^:]*:.*?\\{([^\\}]*)\\}", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(response);
+
+        int monthOffset = 1;
+        while (matcher.find() && certificates.size() < 3) {
+            String certText = matcher.group(1);
+
+            // Try to extract name and institution
+            String name = "Sample Certificate";
+            String institution = "Sample Institution";
+
+            Pattern namePattern = Pattern.compile("name[^:]*:\\s*[\"']?([^\"',}]+)[\"']?", Pattern.CASE_INSENSITIVE);
+            Matcher nameMatcher = namePattern.matcher(certText);
+            if (nameMatcher.find()) {
+                name = nameMatcher.group(1).trim();
+            }
+
+            Pattern instPattern = Pattern.compile("(institution|issuer|provider)[^:]*:\\s*[\"']?([^\"'}]+)[\"']?",
+                    Pattern.CASE_INSENSITIVE);
+            Matcher instMatcher = instPattern.matcher(certText);
+            if (instMatcher.find()) {
+                institution = instMatcher.group(2).trim();
+            }
+
+            // Create certificate with dates a few months apart
+            certificates.add(new Certificate(
+                    name,
+                    institution,
+                    now.minusMonths(monthOffset),
+                    Certificate.CertificateType.TECHNICAL
+            ));
+
+            monthOffset += 2;
+        }
+
+        return certificates;
+    }
+
+    private List<Language> extractLanguages(String response) {
+        List<Language> languages = new ArrayList<>();
+
+        // Try to find languages
+        Pattern pattern = Pattern.compile("language[^:]*:.*?\\{([^\\}]*)\\}", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(response);
+
+        while (matcher.find() && languages.size() < 3) {
+            String langText = matcher.group(1);
+
+            // Try to extract name and level
+            String name = "English";
+            String levelStr = "B2";
+
+            Pattern namePattern = Pattern.compile("name[^:]*:\\s*[\"']?([^\"',}]+)[\"']?", Pattern.CASE_INSENSITIVE);
+            Matcher nameMatcher = namePattern.matcher(langText);
+            if (nameMatcher.find()) {
+                name = nameMatcher.group(1).trim();
+            }
+
+            Pattern levelPattern = Pattern.compile("(level|proficiency)[^:]*:\\s*[\"']?([^\"'}]+)[\"']?",
+                    Pattern.CASE_INSENSITIVE);
+            Matcher levelMatcher = levelPattern.matcher(langText);
+            if (levelMatcher.find()) {
+                levelStr = levelMatcher.group(2).trim();
+            }
+
+            // Map the level text to ProficiencyLevel enum
+            Language.ProficiencyLevel level = mapToProficiencyLevel(levelStr);
+            languages.add(new Language(name, level));
+        }
+
+        return languages;
+    }
+
+    private Language.ProficiencyLevel mapToProficiencyLevel(String levelText) {
+        levelText = levelText.toUpperCase();
+
+        if (levelText.contains("A1") || levelText.contains("BEGIN")) {
+            return Language.ProficiencyLevel.A1;
+        } else if (levelText.contains("A2") || levelText.contains("ELEM")) {
+            return Language.ProficiencyLevel.A2;
+        } else if (levelText.contains("B1") || levelText.contains("INTER")) {
+            return Language.ProficiencyLevel.B1;
+        } else if (levelText.contains("B2") || levelText.contains("UPPER")) {
+            return Language.ProficiencyLevel.B2;
+        } else if (levelText.contains("C1") || levelText.contains("ADV")) {
+            return Language.ProficiencyLevel.C1;
+        } else if (levelText.contains("C2") || levelText.contains("MAST") || levelText.contains("FLUEN") ||
+                levelText.contains("NATIV")) {
+            return Language.ProficiencyLevel.C2;
+        } else {
+            // Default to B2 if we can't determine the level
+            return Language.ProficiencyLevel.B2;
+        }
+    }
+
+    }
 ==================================================
 
