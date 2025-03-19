@@ -1,24 +1,4 @@
 Structure du projet:
-┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐
-│  UI Components  │       │ Service Layer   │       │  AI Components  │
-│-----------------│       │-----------------│       │-----------------│
-│ Page1Controller │──┐    │                 │       │                 │
-│ Page2Controller │  │    │ PDFGeneration   │       │ AIPromptBuilder │
-│ FXML Files      │  ├───►│ Service         │       │ AIResponseParser│
-└─────────────────┘  │    │                 │   ┌──►│                 │
-                     │    │ CVImprovement   │   │   └─────────────────┘
-┌─────────────────┐  │    │ Service         │   │   ┌─────────────────┐
-│   Data Models   │  │    │                 │   │   │  API Clients    │
-│-----------------│  │    │ AIRecommendation│───┘   │-----------------│
-│       CV        │◄─┼────│ Service         │       │ HuggingFaceClient│
-│  WorkExperience │  │    │                 │       │                 │
-│    Education    │  │    └─────────────────┘       │                 │
-│      Skill      │  │                              └─────┬───────────┘
-│     Project     │  │    ┌─────────────────┐            │
-│   Certificate   │  │    │  Configuration  │            │
-│    Language     │  │    │-----------------│            │
-└─────────────────┘  └───►│ HuggingFaceConfig│◄───────────┘
-                          └─────────────────┘
 .idea
 logs
 output
@@ -1154,7 +1134,8 @@ Chemin complet: C:\Users\Sh-Pc\Desktop\HomeFORNOW\KHEDMA\src\main\resources\com\
                 <Button fx:id="backButton" onAction="#goToPage1" style="-fx-background-color: #E31A22; -fx-text-fill: white;" text="Back" GridPane.columnIndex="0" GridPane.rowIndex="8" />
                 <ComboBox fx:id="languageComboBox" GridPane.columnIndex="0" GridPane.rowIndex="9" />
                 <Button fx:id="translateButton" onAction="#translatePage" style="-fx-background-color: #E31A22; -fx-text-fill: white;" text="Translate" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-
+                <!-- Add this to your FXML near the other buttons -->
+                <Button fx:id="analyzeButton" text="AI Analysis" GridPane.columnIndex="0" GridPane.rowIndex="12" />
                 <!-- Generate PDF Button -->
                 <Button fx:id="generatePDFButton" onAction="#generatePDF" style="-fx-background-color: #E31A22; -fx-text-fill: white;" text="Generate PDF" GridPane.columnIndex="1" GridPane.rowIndex="10" />
                 <Button fx:id="autoFillButton" text="Auto Fill" onAction="#autoFillForm" GridPane.columnIndex="1" GridPane.rowIndex="11" />
@@ -2512,17 +2493,19 @@ public class Page2Controller {
         setupProjectDescriptionLimit();
         setupSkillField();
         updateTranslations();
+
+        // Create the analyze button
         Button analyzeButton = new Button("AI Analysis");
         analyzeButton.setStyle("-fx-background-color: #E31A22; -fx-text-fill: white;");
         analyzeButton.setOnAction(e -> analyzeCV());
-        HBox buttonArea = (HBox) generatePDFButton.getParent();
-        buttonArea.getChildren().add(analyzeButton);
 
+        // Get the parent and add the button to the grid properly
+        GridPane buttonArea = (GridPane) generatePDFButton.getParent();
+        buttonArea.add(analyzeButton, 0, 12);
 
-
-
+        // Don't add it again - DELETE THIS LINE
+        // buttonArea.getChildren().add(analyzeButton);
     }
-
 
 
     private void setupLanguageComboBox() {
